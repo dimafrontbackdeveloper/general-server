@@ -482,3 +482,10 @@ app.post('/settings', async (req, res) => {
 		data: 'success',
 	})
 })
+
+app.listen(5000, async err => {
+	if (err) {
+		return console.log(err)
+	}
+	console.log('Server OK')
+})

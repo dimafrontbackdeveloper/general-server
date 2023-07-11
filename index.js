@@ -317,7 +317,6 @@ async function main(token, sheetBaseUrl, bk, logMessage = '') {
 				console.log(data)
 			}
 		}
-		console.log('finish')
 
 		// start bot
 		await fetch(
@@ -353,6 +352,7 @@ async function main(token, sheetBaseUrl, bk, logMessage = '') {
 			},
 			body: JSON.stringify({ newAccounts }),
 		})
+		console.log('finish')
 
 		return 'success'
 	} catch (error) {

@@ -141,6 +141,46 @@ async function main(token, sheetBaseUrl, bk, logMessage = '') {
 				})
 			}
 
+			if (logMessage === 'balanceLessThenZero') {
+				const handledForksResponce = await fetch(
+					`https://alg-fox.net/api/v1/bot-client/connected/${activeAccount.botUuid}/`,
+					{
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+							authorization: `bearer ${token}`,
+						},
+						body: JSON.stringify({
+							msg_type: 'READ_HANDLED_FORK_RECORDS',
+							params: {
+								limit: 3,
+								statuses: ['VALUE_BET'],
+							},
+						}),
+					}
+				)
+
+				const handledForksData = await handledForksResponce.json()
+
+				valueBets = handledForksData.handledForkList
+				do {
+					indexOfActiveAccount += 1
+					indexOfActiveAccount = checkIsNeedToReplaceIndexOfActiveAccountToZero(
+						indexOfActiveAccount,
+						accounts
+					)
+				} while (eval(accounts[indexOfActiveAccount].isNeedToCheck))
+
+				accounts = accounts.map(account => {
+					if (account.botUuid !== activeAccount.botUuid) {
+						return account
+					} else {
+						activeAccount['isNeedToCheck'] = 'true'
+						return activeAccount
+					}
+				})
+			}
+
 			if (logMessage === 'limit') {
 				const handledForksResponce = await fetch(
 					`https://alg-fox.net/api/v1/bot-client/connected/${activeAccount.botUuid}/`,
